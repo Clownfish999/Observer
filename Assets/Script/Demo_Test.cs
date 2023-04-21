@@ -4,17 +4,23 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class Demo_Test : UIBaseWindow {
+public class Demo_Test : Observer {
 
 
     public void OnClickSendNotificationBtn()
     {
-        SendNotification("observer_test", "Send_test", new Streetball.EventParm("sendNotification","发送消息"));
+        ObserverManaager.SendNotification("observer_test", NoteConstant.SEND_TEST, new EventParm("sendNotification", "发送消息"));
+
     }
 
-    public void OnClickPostNotificationBtn()
+    public void OnClickPostNotificationBtn_01()
     {
-        PostNotification("post_test", new Streetball.EventParm("postNotification", "广播消息"));
+        ObserverManaager.PostNotifcation(NoteConstant.POST_TEST, new EventParm("postNotification", "广播消息01"));
+    }
+
+    public void OnClickPostNotificationBtn_02()
+    {
+        ObserverManaager.PostNotifcation(NoteConstant.SEND_TEST, new EventParm("postNotification", "广播消息02"));
     }
 
 

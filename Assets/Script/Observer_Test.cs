@@ -1,22 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Streetball;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Observer_Test : UIBaseWindow
+public class Observer_Test : Observer
 {
-    private Text send_Text, post_text;
+    private Text send_Text, post_text01,post_text02;
 
-    protected override void _AwakeImpl()
+    void Awake()
     {
-        base._AwakeImpl();
         send_Text = this.transform.Find("SendNotification/Text").GetComponent<Text>();
-        post_text = this.transform.Find("PostNotifcation/Text").GetComponent<Text>();
+        post_text01 = this.transform.Find("PostNotifcation01/Text").GetComponent<Text>();
+        post_text02 = this.transform.Find("PostNotifcation02/Text").GetComponent<Text>();
+        //注册观察者
+        ObserverManaager.RegisterObserver(this);
+        //注册观察者消息通知
+        ObserverManaager.RegisterNotification(this);
     }
-    protected override void _StartImpl()
+    void Start()
     {
-        base._StartImpl();
+
     }
 
     public override string GetName()
@@ -40,8 +43,9 @@ public class Observer_Test : UIBaseWindow
                 {
                     if (data_.IsExist("postNotification"))
                     {
-                        post_text.text = (string)data_["postNotification"];
+                        post_text01.text = (string)data_["postNotification"];
                     }
+                    
 
                     break;
                 }
@@ -51,6 +55,10 @@ public class Observer_Test : UIBaseWindow
                     {
                         send_Text.text = (string)data_["sendNotification"];
                     }
+                    if (data_.IsExist("postNotification"))
+                    {
+                        post_text02.text = (string)data_["postNotification"];
+                    }
 
                     break;
                 }
@@ -58,4 +66,13 @@ public class Observer_Test : UIBaseWindow
                 break;
         }
     }
+
+    void OnDestroy()
+    {
+        //撤消观察者
+        ObserverManaager.UnregiserObserver(this);
+        //撤消观察者消息通知
+        ObserverManaager.UnregiserNotification(this);
+    }
+
 }
